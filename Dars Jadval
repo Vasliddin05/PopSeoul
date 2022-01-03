@@ -1,0 +1,60 @@
+from telegram import ReplyKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters
+
+buttons = ReplyKeyboardMarkup([['Dushanba', 'Seshanba'],['Chorshanba', 'Payshanba'],['Juma', 'Shanba']], resize_keyboard=True)
+
+def start(update, context):
+	update.message.reply_html(
+		'<b>Assalomu alaykum {}</b>\nSizga qaysi kundagi dars jadvali kerak tanlang \n👇👇👇'.format(update.message.from_user.first_name), reply_markup=buttons)
+	return 1
+
+
+
+def duy(update, context):
+	update.message.reply_html(
+    	'<b>Dushanba 📚\n \n \n \n 1.O`zbekiston Tarixi\n \n 2.Kimyo\n \n 3.Fizika\n \n 4.ChQBT\n \n 5.Biologiya</b>', reply_markup=buttons)
+
+def sey(update, context):
+	update.message.reply_html(
+    	'<b>Seshanba 📚\n \n \n \n 1.Algebra\n \n 2.Informatika\n \n 3.Jismoniy tarbiya\n \n 4.Ingliz tili\n \n 5.Fizika</b>', reply_markup=buttons)
+
+def chor(update, context):
+	update.message.reply_html(
+    	'<b>Chorshanba 📚\n \n \n \n 1.Algebra\n \n 2.Jaxon Tarixi\n \n 3.Rus tili\n \n 4.Huquq\n \n 5.Ona tili</b>', reply_markup=buttons)
+
+def pay(update, context):
+	update.message.reply_html(
+    	'<b>Payshanba 📚\n \n \n \n 1.Algebra\n \n 2.Kimyo\n \n 3.Ingliz tili\n \n 4.Jismon\n \n 5.Adabiyot</b>', reply_markup=buttons)
+
+def jum(update, context):
+	update.message.reply_html(
+    	'<b>Juma 📚\n \n \n \n 1.Sinf soati\n \n 2.Biologiya\n \n 3.Informatika\n \n 4.Geometriya\n \n 5.Ona tii</b>', reply_markup=buttons)
+
+def shan(update, context):
+	update.message.reply_html(
+    	'<b>Shanba 📚\n \n \n \n 1.Geometriya\n \n 2.Geografiya\n \n 3.English\n \n 4.Adabiyot\n \n 5.Tarbiya\n \n 6.Rus tili</b>', reply_markup=buttons)
+
+
+
+
+
+updater = Updater('5011376790:AAFUwyE_tIxOB-bUfGoPaB7b4wHzRCvz0lM', use_context=True)
+conv_handler = ConversationHandler(
+	entry_points = [CommandHandler('start', start)],
+	states={
+		1:[
+			MessageHandler(Filters.regex('^(Dushanba)$'), duy),
+			MessageHandler(Filters.regex('^(Seshanba)$'), sey),
+			MessageHandler(Filters.regex('^(Chorshanba)$'), chor),
+			MessageHandler(Filters.regex('^(Payshanba)$'), pay),
+			MessageHandler(Filters.regex('^(Juma)$'), jum),
+			MessageHandler(Filters.regex('^(Shanba)$'), shan)
+		]
+	},
+	fallbacks=[MessageHandler(Filters.text, start)]
+	)
+
+updater.dispatcher.add_handler(conv_handler)
+
+updater.start_polling()
+updater.idle()
